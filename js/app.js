@@ -156,6 +156,7 @@
   const chapters = {
     chapter1: typeof Chapter1 !== 'undefined' ? Chapter1 : null,
     chapter2: typeof Chapter2 !== 'undefined' ? Chapter2 : null,
+    chapter3: typeof Chapter3 !== 'undefined' ? Chapter3 : null,
   };
 
   const chapterSelect = document.getElementById('chapter-select');
