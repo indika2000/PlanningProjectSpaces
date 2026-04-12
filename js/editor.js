@@ -133,7 +133,7 @@ const Editor = (() => {
   }
 
   function importGame(data) {
-    game = data;
+    game = JSON.parse(JSON.stringify(data));
     activeSceneId = null;
     sceneForm.classList.add('hidden');
     placeholder.classList.remove('hidden');

@@ -1,13 +1,13 @@
 /**
  * Engine – generates a self-contained HTML page for the text adventure game,
  * designed to run inside a sandboxed iframe (the "artifact" screen).
- * Supports an optional splash screen before game start.
+ * Supports splash screen, net worth tracking, and turn counter.
  */
 const Engine = (() => {
 
   /**
    * Build a full HTML document string that plays the adventure game.
-   * @param {Object} gameData - { title, subtitle, scenes, startScene, splashSvg }
+   * @param {Object} gameData - { title, subtitle, scenes, startScene, splashSvg, startingMoney }
    * @returns {string} Complete HTML document
    */
   function build(gameData) {
@@ -17,6 +17,8 @@ const Engine = (() => {
     const subtitle = gameData.subtitle || '';
     const splashSvg = gameData.splashSvg || '';
     const hasSplash = !!splashSvg;
+    const startingMoney = gameData.startingMoney || 0;
+    const goalMoney = gameData.goalMoney || 1000000000;
 
     return `<!DOCTYPE html>
 <html lang="en">
@@ -50,10 +52,7 @@ const Engine = (() => {
     z-index: 100;
     transition: opacity 0.8s ease, visibility 0.8s ease;
   }
-  .splash-screen.fade-out {
-    opacity: 0;
-    visibility: hidden;
-  }
+  .splash-screen.fade-out { opacity: 0; visibility: hidden; }
   .splash-svg {
     width: 90%;
     max-width: 600px;
@@ -109,18 +108,110 @@ const Engine = (() => {
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* ---- Game Container ---- */
-  .game-container {
-    max-width: 640px;
-    width: 100%;
+  /* ---- Net Worth HUD ---- */
+  .hud {
+    position: sticky;
+    top: 0;
+    background: #0a0c12;
+    padding: 12px 0 16px;
+    z-index: 50;
+    border-bottom: 1px solid #1a1d27;
+    margin-bottom: 24px;
   }
-  .game-title {
+  .hud-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .hud-title {
     font-size: 12px;
     text-transform: uppercase;
     letter-spacing: 1.5px;
     color: #555a72;
-    margin-bottom: 32px;
-    text-align: center;
+  }
+  .hud-networth {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hud-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #555a72;
+  }
+  .hud-amount {
+    font-size: 20px;
+    font-weight: 700;
+    color: #2ecc71;
+    font-variant-numeric: tabular-nums;
+    transition: color 0.3s;
+  }
+  .hud-amount.negative { color: #e74c3c; }
+  .hud-turn {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #555a72;
+  }
+  .progress-bar {
+    width: 100%;
+    height: 6px;
+    background: #1a1d27;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 6px;
+  }
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #6c5ce7, #2ecc71);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    min-width: 2px;
+  }
+  .progress-labels {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+  }
+  .progress-labels span {
+    font-size: 10px;
+    color: #3d4159;
+  }
+  .money-change {
+    display: inline-block;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+    animation: moneyPop 0.5s ease;
+  }
+  .money-change.gain { color: #2ecc71; background: rgba(46,204,113,0.1); }
+  .money-change.loss { color: #e74c3c; background: rgba(231,76,60,0.1); }
+  @keyframes moneyPop {
+    0% { transform: scale(0.8) translateY(4px); opacity: 0; }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1) translateY(0); opacity: 1; }
+  }
+
+  /* Choice money hints */
+  .choice-money {
+    float: right;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+  }
+  .choice-money.gain { color: #2ecc71; background: rgba(46,204,113,0.1); }
+  .choice-money.loss { color: #e74c3c; background: rgba(231,76,60,0.1); }
+
+  /* ---- Game Container ---- */
+  .game-container {
+    max-width: 640px;
+    width: 100%;
   }
   .scene-title {
     font-size: 22px;
@@ -194,6 +285,12 @@ const Engine = (() => {
     font-weight: 600;
   }
   .end-msg button:hover { background: #7f71ed; }
+  .end-msg .final-worth {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2ecc71;
+    margin: 16px 0;
+  }
 
   /* Scroll history */
   .history-entry { margin-bottom: 40px; opacity: 0.5; }
@@ -207,7 +304,6 @@ const Engine = (() => {
     to   { opacity: 1; transform: translateY(0); }
   }
 
-  /* To-be-continued styling */
   .end-msg .tbc {
     font-size: 20px;
     font-weight: 600;
@@ -227,7 +323,20 @@ ${hasSplash ? `
 </div>
 ` : ''}
 <div class="game-container" id="game" ${hasSplash ? 'style="display:none"' : ''}>
-  <div class="game-title" id="game-title"></div>
+  <div class="hud" id="hud">
+    <div class="hud-top">
+      <span class="hud-title" id="hud-title"></span>
+      <div class="hud-networth">
+        <span class="hud-label">Net Worth</span>
+        <span class="hud-amount" id="hud-amount">$0</span>
+      </div>
+    </div>
+    <div class="hud-top">
+      <span class="hud-turn" id="hud-turn">Turn 1</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+    <div class="progress-labels"><span>$0</span><span>$1 Billion</span></div>
+  </div>
   <div id="history"></div>
   <div id="current" class="current-entry"></div>
 </div>
@@ -237,13 +346,47 @@ ${hasSplash ? `
   var startScene = ${JSON.stringify(startScene)};
   var title = ${JSON.stringify(title)};
   var hasSplash = ${hasSplash};
+  var goalMoney = ${goalMoney};
 
   var historyEl  = document.getElementById('history');
   var currentEl  = document.getElementById('current');
   var gameEl     = document.getElementById('game');
-  document.getElementById('game-title').textContent = title;
+  var hudAmount  = document.getElementById('hud-amount');
+  var hudTurn    = document.getElementById('hud-turn');
+  var progressFill = document.getElementById('progress-fill');
+  document.getElementById('hud-title').textContent = title;
 
   var currentSceneId = null;
+  var netWorth = ${startingMoney};
+  var turn = 0;
+
+  function formatMoney(n) {
+    var abs = Math.abs(n);
+    var sign = n < 0 ? '-' : '';
+    if (abs >= 1e9) return sign + '$' + (abs / 1e9).toFixed(1) + 'B';
+    if (abs >= 1e6) return sign + '$' + (abs / 1e6).toFixed(1) + 'M';
+    if (abs >= 1e3) return sign + '$' + (abs / 1e3).toFixed(0) + 'K';
+    return sign + '$' + abs.toLocaleString();
+  }
+
+  function updateHUD(moneyDelta) {
+    hudAmount.textContent = formatMoney(netWorth);
+    hudAmount.className = 'hud-amount' + (netWorth < 0 ? ' negative' : '');
+    hudTurn.textContent = 'Turn ' + turn;
+    var pct = Math.min(100, Math.max(0, (netWorth / goalMoney) * 100));
+    progressFill.style.width = pct + '%';
+
+    // Show money change animation
+    if (moneyDelta && moneyDelta !== 0) {
+      var existing = hudAmount.parentNode.querySelector('.money-change');
+      if (existing) existing.remove();
+      var badge = document.createElement('span');
+      badge.className = 'money-change ' + (moneyDelta > 0 ? 'gain' : 'loss');
+      badge.textContent = (moneyDelta > 0 ? '+' : '') + formatMoney(moneyDelta);
+      hudAmount.parentNode.appendChild(badge);
+      setTimeout(function() { badge.remove(); }, 2000);
+    }
+  }
 
   function startGame() {
     if (hasSplash) {
@@ -252,6 +395,7 @@ ${hasSplash ? `
       gameEl.style.display = '';
       setTimeout(function() { splash.remove(); }, 900);
     }
+    updateHUD(0);
     renderScene(startScene);
   }
 
@@ -261,7 +405,9 @@ ${hasSplash ? `
     startGame();
   }
 
-  function renderScene(sceneId) {
+  function renderScene(sceneId, moneyDelta) {
+    turn++;
+
     // Push previous scene to history
     if (currentSceneId && scenes[currentSceneId]) {
       var prev = scenes[currentSceneId];
@@ -276,10 +422,19 @@ ${hasSplash ? `
     currentSceneId = sceneId;
     var scene = scenes[sceneId];
 
+    // Apply scene-level money (earned just by reaching this scene)
+    if (scene && scene.money) {
+      netWorth += scene.money;
+      moneyDelta = (moneyDelta || 0) + scene.money;
+    }
+
+    updateHUD(moneyDelta || 0);
+
     if (!scene) {
       currentEl.innerHTML =
         '<div class="end-msg">' +
         '<p>The adventure ends here.</p>' +
+        '<p class="final-worth">' + formatMoney(netWorth) + '</p>' +
         '<button onclick="location.reload()">Play Again</button>' +
         '</div>';
       return;
@@ -292,16 +447,24 @@ ${hasSplash ? `
     if (scene.choices && scene.choices.length > 0) {
       html += '<div class="choices">';
       scene.choices.forEach(function(ch, i) {
-        html += '<button class="choice-btn" data-target="' + esc(ch.target) + '">' +
+        var moneyHint = '';
+        if (ch.money && ch.money > 0) {
+          moneyHint = '<span class="choice-money gain">+' + formatMoney(ch.money) + '</span>';
+        } else if (ch.money && ch.money < 0) {
+          moneyHint = '<span class="choice-money loss">' + formatMoney(ch.money) + '</span>';
+        }
+        html += '<button class="choice-btn" data-target="' + esc(ch.target) + '" data-money="' + (ch.money || 0) + '">' +
                 '<span class="choice-num">' + (i + 1) + '</span>' +
                 esc(ch.label) +
+                moneyHint +
                 '</button>';
       });
       html += '</div>';
     } else {
       html += '<div class="end-msg">' +
               '<p class="tbc">To be continued...</p>' +
-              '<p>Chapter 1 complete.</p>' +
+              '<p>Chapter complete. Net worth:</p>' +
+              '<p class="final-worth">' + formatMoney(netWorth) + '</p>' +
               '<button onclick="location.reload()">Play Again</button>' +
               '</div>';
     }
@@ -312,7 +475,9 @@ ${hasSplash ? `
     // Bind choice buttons
     currentEl.querySelectorAll('.choice-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        renderScene(btn.getAttribute('data-target'));
+        var choiceMoney = parseInt(btn.getAttribute('data-money')) || 0;
+        netWorth += choiceMoney;
+        renderScene(btn.getAttribute('data-target'), choiceMoney);
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
       });
     });
