@@ -14,11 +14,17 @@
     </div>
     <div class="header-actions">
       <button id="btn-new" title="New Game">New</button>
-      <button id="btn-import" title="Import JSON">Import</button>
-      <button id="btn-export" title="Export JSON">Export</button>
+      <button id="btn-import" title="Import JSON" class="hide-mobile">Import</button>
+      <button id="btn-export" title="Export JSON" class="hide-mobile">Export</button>
       <button id="btn-play" class="btn-primary" title="Launch game in preview">Play</button>
     </div>
   </header>
+
+  <!-- Mobile tab bar: switch between Editor and Preview -->
+  <nav class="mobile-tabs" id="mobile-tabs">
+    <button class="mobile-tab active" data-tab="editor">Edit</button>
+    <button class="mobile-tab" data-tab="preview">Preview</button>
+  </nav>
 
   <main class="split-pane">
     <!-- LEFT: Editor Panel -->

@@ -97,12 +97,41 @@
     }
   });
 
+  /* ==================== Mobile Tabs ==================== */
+  const mobileTabs = document.getElementById('mobile-tabs');
+  const splitPane  = document.querySelector('.split-pane');
+
+  // Set initial state
+  splitPane.setAttribute('data-active-tab', 'editor');
+
+  mobileTabs.addEventListener('click', (e) => {
+    const tab = e.target.closest('.mobile-tab');
+    if (!tab) return;
+    const target = tab.dataset.tab;
+    splitPane.setAttribute('data-active-tab', target);
+    mobileTabs.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+
+  // Auto-switch to preview when Play is pressed on mobile
+  const origPlay = play;
+  function playMobile() {
+    origPlay();
+    if (window.innerWidth <= 768) {
+      splitPane.setAttribute('data-active-tab', 'preview');
+      mobileTabs.querySelectorAll('.mobile-tab').forEach(t => t.classList.remove('active'));
+      mobileTabs.querySelector('[data-tab="preview"]').classList.add('active');
+    }
+  }
+  document.getElementById('btn-play').onclick    = playMobile;
+  document.getElementById('btn-restart').onclick = playMobile;
+
   /* ==================== Keyboard shortcut ==================== */
   document.addEventListener('keydown', (e) => {
     // Ctrl/Cmd+Enter = Play
     if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
       e.preventDefault();
-      play();
+      playMobile();
     }
     // Ctrl/Cmd+S = Save scene
     if ((e.ctrlKey || e.metaKey) && e.key === 's') {

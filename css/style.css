@@ -264,3 +264,93 @@ input[type="text"]:focus, textarea:focus {
 .preview-panel.fullscreen .panel-header {
   background: var(--surface);
 }
+
+/* ===== Mobile Tab Bar ===== */
+.mobile-tabs {
+  display: none;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+}
+.mobile-tab {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 0;
+  background: var(--surface);
+  color: var(--text-dim);
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+  transition: color 0.15s, box-shadow 0.15s;
+}
+.mobile-tab.active {
+  color: var(--accent);
+  box-shadow: inset 0 -2px 0 var(--accent);
+  background: var(--surface);
+}
+
+/* ===== Mobile Responsive ===== */
+@media (max-width: 768px) {
+  /* Header */
+  .app-header {
+    padding: 8px 12px;
+    height: auto;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .header-left h1 { font-size: 14px; }
+  .tagline { display: none; }
+  .header-actions { gap: 6px; }
+  .header-actions button { padding: 6px 10px; font-size: 12px; }
+  .hide-mobile { display: none !important; }
+
+  /* Show mobile tab bar */
+  .mobile-tabs { display: flex; }
+
+  /* Stack panels vertically, show one at a time */
+  .split-pane {
+    flex-direction: column;
+    height: calc(100vh - 54px - 41px); /* header + tabs */
+  }
+
+  .editor-panel {
+    width: 100% !important;
+    min-width: 0;
+    flex: 1;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .preview-panel { flex: 1; }
+
+  /* Hide inactive panel */
+  .split-pane[data-active-tab="preview"] .editor-panel { display: none; }
+  .split-pane[data-active-tab="editor"] .preview-panel { display: none; }
+
+  /* Hide resizer on mobile */
+  .resizer { display: none; }
+
+  /* Scene list: horizontal scroll, smaller */
+  .scene-list { padding: 8px 12px; gap: 4px; }
+  .scene-card { font-size: 11px; padding: 5px 10px; }
+
+  /* Editor form */
+  .scene-editor { padding: 12px; }
+  .form-group { margin-bottom: 12px; }
+  input[type="text"], textarea { font-size: 16px; padding: 10px 12px; } /* 16px prevents iOS zoom */
+
+  /* Choice rows stack vertically on small screens */
+  .choice-row { flex-wrap: wrap; }
+  .choice-row .choice-target { width: 100%; }
+
+  /* Panel headers */
+  .panel-header { padding: 8px 12px; }
+
+  /* Preview placeholder */
+  .preview-placeholder-content svg { width: 48px; height: 48px; }
+  .preview-placeholder-content p { font-size: 13px; }
+
+  /* Form actions */
+  .form-actions { flex-direction: column; }
+  .form-actions button { width: 100%; padding: 12px; }
+}
