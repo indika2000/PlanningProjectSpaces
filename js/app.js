@@ -152,10 +152,27 @@
     }
   });
 
-  /* ==================== Load Chapter 1 as starter ==================== */
-  // Chapter1 is defined in chapter1.js, loaded before this script
-  if (typeof Chapter1 !== 'undefined') {
-    Editor.importGame(Chapter1);
+  /* ==================== Chapter Selection ==================== */
+  const chapters = {
+    chapter1: typeof Chapter1 !== 'undefined' ? Chapter1 : null,
+    chapter2: typeof Chapter2 !== 'undefined' ? Chapter2 : null,
+  };
+
+  const chapterSelect = document.getElementById('chapter-select');
+
+  function loadChapter(key) {
+    const chapter = chapters[key];
+    if (!chapter) return;
+    Editor.importGame(chapter);
+    previewFrame.src = 'about:blank';
+    previewPlaceholder.classList.remove('hidden');
   }
+
+  chapterSelect.addEventListener('change', () => {
+    loadChapter(chapterSelect.value);
+  });
+
+  // Load Chapter 1 on startup
+  loadChapter('chapter1');
 
 })();
