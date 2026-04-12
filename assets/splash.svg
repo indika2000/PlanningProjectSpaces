@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a0c12"/>
+      <stop offset="50%" style="stop-color:#12141f"/>
+      <stop offset="100%" style="stop-color:#0a0c12"/>
+    </linearGradient>
+    <linearGradient id="tableGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2a1f4e"/>
+      <stop offset="100%" style="stop-color:#1a1333"/>
+    </linearGradient>
+    <linearGradient id="windowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a1d3a"/>
+      <stop offset="60%" style="stop-color:#0d0f1e"/>
+      <stop offset="100%" style="stop-color:#06070d"/>
+    </linearGradient>
+    <linearGradient id="glowGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#6c5ce7;stop-opacity:0.4"/>
+      <stop offset="100%" style="stop-color:#6c5ce7;stop-opacity:0"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+
+  <!-- City skyline through windows -->
+  <g opacity="0.15">
+    <!-- Window frames -->
+    <rect x="50" y="40" width="200" height="200" rx="4" fill="url(#windowGrad)" stroke="#2e3348" stroke-width="1"/>
+    <rect x="300" y="40" width="200" height="200" rx="4" fill="url(#windowGrad)" stroke="#2e3348" stroke-width="1"/>
+    <rect x="550" y="40" width="200" height="200" rx="4" fill="url(#windowGrad)" stroke="#2e3348" stroke-width="1"/>
+
+    <!-- Buildings silhouettes -->
+    <g fill="#1a1d3a">
+      <rect x="70" y="120" width="30" height="120"/>
+      <rect x="110" y="90" width="25" height="150"/>
+      <rect x="145" y="140" width="35" height="100"/>
+      <rect x="190" y="100" width="20" height="140"/>
+      <rect x="320" y="100" width="40" height="140"/>
+      <rect x="370" y="130" width="25" height="110"/>
+      <rect x="410" y="80" width="30" height="160"/>
+      <rect x="450" y="110" width="20" height="130"/>
+      <rect x="570" y="95" width="35" height="145"/>
+      <rect x="620" y="130" width="25" height="110"/>
+      <rect x="660" y="70" width="30" height="170"/>
+      <rect x="710" y="120" width="20" height="120"/>
+    </g>
+
+    <!-- Tiny window lights -->
+    <g fill="#6c5ce7" opacity="0.6">
+      <rect x="75" y="130" width="4" height="4"/>
+      <rect x="85" y="145" width="4" height="4"/>
+      <rect x="115" y="100" width="4" height="4"/>
+      <rect x="115" y="115" width="4" height="4"/>
+      <rect x="325" y="110" width="4" height="4"/>
+      <rect x="340" y="135" width="4" height="4"/>
+      <rect x="415" y="95" width="4" height="4"/>
+      <rect x="415" y="110" width="4" height="4"/>
+      <rect x="575" y="105" width="4" height="4"/>
+      <rect x="590" y="140" width="4" height="4"/>
+      <rect x="665" y="85" width="4" height="4"/>
+      <rect x="665" y="100" width="4" height="4"/>
+    </g>
+  </g>
+
+  <!-- Floor reflection line -->
+  <line x1="0" y1="420" x2="800" y2="420" stroke="#2e3348" stroke-width="0.5" opacity="0.5"/>
+
+  <!-- Boardroom table - elongated oval in perspective -->
+  <ellipse cx="400" cy="340" rx="250" ry="60" fill="url(#tableGrad)" stroke="#3d2e6b" stroke-width="1.5"/>
+
+  <!-- Table surface glow -->
+  <ellipse cx="400" cy="338" rx="220" ry="45" fill="none" stroke="#6c5ce7" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Central glowing document/screen on table -->
+  <g filter="url(#glow)">
+    <rect x="365" y="318" width="70" height="44" rx="3" fill="#161823" stroke="#6c5ce7" stroke-width="1" opacity="0.8"/>
+    <!-- Document lines -->
+    <line x1="375" y1="330" x2="425" y2="330" stroke="#6c5ce7" stroke-width="1" opacity="0.4"/>
+    <line x1="375" y1="338" x2="415" y2="338" stroke="#6c5ce7" stroke-width="1" opacity="0.3"/>
+    <line x1="375" y1="346" x2="420" y2="346" stroke="#6c5ce7" stroke-width="1" opacity="0.2"/>
+  </g>
+
+  <!-- Chair silhouettes around the table -->
+  <g fill="#1a1d27" stroke="#2e3348" stroke-width="1">
+    <!-- Head of table (far end) -->
+    <path d="M385,270 Q400,260 415,270 L418,285 Q400,278 382,285 Z" opacity="0.8"/>
+
+    <!-- Left side chairs -->
+    <path d="M180,310 Q190,300 200,310 L203,325 Q190,318 177,325 Z" opacity="0.6"/>
+    <path d="M230,295 Q240,285 250,295 L253,310 Q240,303 227,310 Z" opacity="0.7"/>
+    <path d="M280,285 Q290,275 300,285 L303,300 Q290,293 277,300 Z" opacity="0.7"/>
+
+    <!-- Right side chairs -->
+    <path d="M600,310 Q610,300 620,310 L623,325 Q610,318 597,325 Z" opacity="0.6"/>
+    <path d="M550,295 Q560,285 570,295 L573,310 Q560,303 547,310 Z" opacity="0.7"/>
+    <path d="M500,285 Q510,275 520,285 L523,300 Q510,293 497,300 Z" opacity="0.7"/>
+
+    <!-- Near end chair (player's perspective) -->
+    <path d="M380,395 Q400,385 420,395 L425,415 Q400,405 375,415 Z" opacity="0.5"/>
+  </g>
+
+  <!-- Atmospheric purple glow from above -->
+  <ellipse cx="400" cy="280" rx="200" ry="100" fill="url(#glowGrad)" opacity="0.3"/>
+
+  <!-- Subtle light rays from windows -->
+  <g opacity="0.05">
+    <polygon points="150,40 100,420 200,420" fill="#6c5ce7"/>
+    <polygon points="400,40 350,420 450,420" fill="#6c5ce7"/>
+    <polygon points="650,40 600,420 700,420" fill="#6c5ce7"/>
+  </g>
+
+  <!-- Accent dots (like status LEDs or ambient lights) -->
+  <g filter="url(#softGlow)">
+    <circle cx="100" cy="260" r="2" fill="#6c5ce7" opacity="0.6"/>
+    <circle cx="700" cy="260" r="2" fill="#6c5ce7" opacity="0.6"/>
+    <circle cx="400" cy="260" r="3" fill="#6c5ce7" opacity="0.4"/>
+  </g>
+</svg>
