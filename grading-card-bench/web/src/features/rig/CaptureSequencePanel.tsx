@@ -8,6 +8,7 @@ import { useState } from "react";
 import type { UseCaptureSequence } from "../capture/useCaptureSequence";
 import type { CaptureStepRuntimeState } from "../capture/capture.types";
 import { LIGHTING_PROFILES } from "../capture/lightingProfiles";
+import { CAPTURE_SEQUENCES } from "../capture/captureSequences";
 import { CameraPreview } from "../camera/CameraPreview";
 import { useRigConnection } from "./useRigConnection";
 
@@ -27,6 +28,7 @@ export function CaptureSequencePanel({ capture }: { capture: UseCaptureSequence 
   const { rig } = useRigConnection();
   const { session } = capture;
   const [cardId, setCardId] = useState("");
+  const [sequenceId, setSequenceId] = useState("default_card_v1");
   const [manualProfile, setManualProfile] = useState("diffuse_full_front");
 
   const running =
@@ -51,11 +53,20 @@ export function CaptureSequencePanel({ capture }: { capture: UseCaptureSequence 
             value={cardId}
             onChange={(e) => setCardId(e.target.value)}
           />
+          <select value={sequenceId} onChange={(e) => setSequenceId(e.target.value)}>
+            {CAPTURE_SEQUENCES.map((s) => (
+              <option key={s.id} value={s.id} title={s.description}>
+                {s.name}
+              </option>
+            ))}
+          </select>
           <button
             className="primary"
             disabled={!rig.connected}
             title={rig.connected ? "" : "Connect the rig first"}
-            onClick={() => void capture.startSession({ cardId: cardId || undefined })}
+            onClick={() =>
+              void capture.startSession({ cardId: cardId || undefined, sequenceId })
+            }
           >
             ▶ Start capture sequence
           </button>

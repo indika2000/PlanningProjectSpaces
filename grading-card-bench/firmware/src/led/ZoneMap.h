@@ -5,6 +5,20 @@
 // the strips are actually wired in your light box. Zones marked
 // installed=false are still reported in capabilities (so the web app can
 // show them greyed out) but reject SET_ZONE/SET_PROFILE usage.
+//
+// Mapping to the rig schematic (docs/hardware-guide.md):
+//   D1 (diffused top panel)   -> ZONE_TOP_DIFFUSE (+ the other *_DIFFUSE
+//                                zones if your panel is built from several
+//                                strips behind one diffuser)
+//   R1 (top raking LED bar)   -> ZONE_TOP_RAKING
+//   R2 (right raking LED bar) -> ZONE_RIGHT_RAKING
+//   R3 (bottom raking bar)    -> ZONE_BOTTOM_RAKING
+//   R4 (left raking LED bar)  -> ZONE_LEFT_RAKING
+//   O1+O2 (specular lights)   -> ZONE_SURFACE_GLARE
+//   White reference patch     -> ZONE_CALIBRATION_WHITE
+//
+// All bars are chained on ONE data line (DIN->DOUT) in the pixel order below;
+// startPixel/pixelCount are positions along that chain.
 // ---------------------------------------------------------------------------
 
 struct LedZone {

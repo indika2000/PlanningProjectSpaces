@@ -113,6 +113,14 @@ class CancelledError extends Error {
   }
 }
 
+/** Operator chose "abort" — must propagate out of the retry loop untouched. */
+class OperatorAbortError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = "OperatorAbortError";
+  }
+}
+
 export class CaptureSequenceEngine {
   private state: CaptureSessionState | null = null;
   private listeners = new Set<Listener>();
@@ -369,6 +377,9 @@ export class CaptureSequenceEngine {
       if (this.cancelled) throw new CancelledError();
       await this.waitIfPaused();
 
+      // Read fresh runtime state — operator decisions reset `attempts`
+      // between iterations, and the local reference is immutable/stale.
+      runtime = this.currentRuntime(step.id);
       this.updateStep(step.id, { attempts: runtime.attempts + 1 });
       runtime = this.currentRuntime(step.id);
 
@@ -459,9 +470,12 @@ export class CaptureSequenceEngine {
           this.setMessage(`${step.name} accepted by operator override.`);
           return;
         }
-        throw new Error(`Step ${step.id} aborted by operator after failed validation`);
+        throw new OperatorAbortError(
+          `Step ${step.id} aborted by operator after failed validation`
+        );
       } catch (err) {
         if (err instanceof CancelledError || this.cancelled) throw new CancelledError();
+        if (err instanceof OperatorAbortError) throw err;
         // Hardware-level failure (rig timeout, camera error, storage error).
         const message = err instanceof Error ? err.message : String(err);
         this.updateStep(step.id, { status: "failed", error: message });

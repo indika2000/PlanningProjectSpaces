@@ -48,13 +48,27 @@ plug the rig in over USB, and run the bridge without `--mock`
 
 ## Reading order
 
-1. [docs/setup.md](docs/setup.md) — install, flash, run
-2. [docs/protocol.md](docs/protocol.md) — the JSON serial protocol
-3. [docs/capture-sequences.md](docs/capture-sequences.md) — the diagnostic shot model
-4. [docs/lighting-profiles.md](docs/lighting-profiles.md) — zones and profiles
-5. [docs/calibration.md](docs/calibration.md) — bench calibration workflow
-6. [docs/testing.md](docs/testing.md) — automated + manual hardware tests
-7. [docs/troubleshooting.md](docs/troubleshooting.md)
+**Building the rig (start here if you have parts and a soldering iron):**
+
+1. [docs/hardware-guide.md](docs/hardware-guide.md) — beginner guide: BOM,
+   ESP32 pin/connector guide, wiring every LED bar (D1, R1–R4, O1–O2),
+   power sizing, assembly, channel testing
+2. [docs/install-and-integration.md](docs/install-and-integration.md) —
+   installing the software from scratch + connecting the rig to your own
+   web app (copyable modules or raw WebSocket protocol)
+
+**Understanding and extending the system:**
+
+3. [docs/architecture.md](docs/architecture.md) — official architecture:
+   components, state machines, safety model, extension points
+4. [docs/setup.md](docs/setup.md) — condensed install/flash/run
+5. [docs/protocol.md](docs/protocol.md) — the JSON serial protocol
+6. [docs/capture-sequences.md](docs/capture-sequences.md) — the diagnostic shot model
+7. [docs/lighting-profiles.md](docs/lighting-profiles.md) — zones and profiles
+8. [docs/wiring.md](docs/wiring.md) — condensed wiring reference
+9. [docs/calibration.md](docs/calibration.md) — bench calibration workflow
+10. [docs/testing.md](docs/testing.md) — 177 automated tests + manual hardware checklist
+11. [docs/troubleshooting.md](docs/troubleshooting.md)
 
 ## Safety model (read before powering LEDs)
 
