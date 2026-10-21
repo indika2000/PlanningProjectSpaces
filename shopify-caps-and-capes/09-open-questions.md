@@ -16,6 +16,8 @@
 
 ## B. Gaps in the mockups (need design)
 
+> First-pass designs for every item below except account pages now exist on the [design canvas](https://claude.ai/artifact/TTwTtAxNgNn18a9Syo2g8w). The About, FAQ and publisher-index pages reuse those components. Treat the canvas as a proposal for review, not as approved designs.
+
 - **Mobile layouts** for all screens (only desktop is mocked).
 - Mega menu contents and layout for COMICS / COLLECTIBLES / ACTION FIGURES.
 - Collection/listing page, search results, predictive search dropdown.

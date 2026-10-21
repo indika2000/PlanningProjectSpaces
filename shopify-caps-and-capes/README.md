@@ -7,6 +7,17 @@ The storefront must look exactly like the two approved mockups and carry their b
 |---|---|
 | Homepage | [`mockups/01-homepage.png`](mockups/01-homepage.png) |
 | Product page (graded comic) | [`mockups/02-product-graded-comic.png`](mockups/02-product-graded-comic.png) |
+| Mobile + additional screens (design canvas) | [Caps & Capes — Mobile & Additional Screens](https://claude.ai/artifact/TTwTtAxNgNn18a9Syo2g8w) |
+
+### Additional screens on the design canvas
+
+Built from the brand tokens in [01-brand-identity.md](01-brand-identity.md) to fill the gaps listed in [09-open-questions.md](09-open-questions.md) §B.
+
+| Mobile (390 px) | Desktop (1440 px) | System |
+|---|---|---|
+| Home · Menu drawer · Predictive search · Collection (Graded) · Filter sheet · Product (graded) with sticky buy bar · Cart drawer | Comics mega menu · Collection with sidebar filters · Cart drawer · Product (collectible, with edition picker) · Sell To Us · Series page + Pull List | Buttons (all states) · Product card states (in stock, low stock, sale, preorder, 1 of 1, sold out) · Toasts · Empty states · Form fields · Tags |
+
+Copy shown as `[PLACEHOLDER]` (free-shipping threshold, store-credit bonus %, offer turnaround, release dates, unknown prices) is waiting on a business decision.
 
 ## How to read these docs
 
