@@ -1,5 +1,7 @@
 # 02 — Domain Model
 
+> **Update — cards:** the store now also sells trading cards (Pokémon, One Piece) and sports cards (baseball, football, basketball), graded and raw, plus sealed product. Every product also carries a Department → Topic → Format classification, and the grading model is shared between comics and cards. See [10-cards-topics-and-showcases.md](10-cards-topics-and-showcases.md).
+
 This doc models the business first, in its own language. It then maps each concept to Shopify primitives: Product, Variant, Collection, Metafield, Metaobject, Customer, Selling Plan.
 
 ## 1. Ubiquitous language

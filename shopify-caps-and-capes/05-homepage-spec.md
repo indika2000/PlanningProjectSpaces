@@ -1,5 +1,7 @@
 # 05 — Homepage Spec
 
+> **Update — cards:** the homepage section order now mixes comics and cards: a showcase hero carousel, topic tiles with availability counts, a mixed Featured carousel with department tabs, split showcases, a "Shop the inventory" availability matrix and a cross-category graded Vault. See [10-cards-topics-and-showcases.md](10-cards-topics-and-showcases.md).
+
 Reference: [`mockups/01-homepage.png`](mockups/01-homepage.png). Measurements are relative to a 1440 px wide desktop viewport.
 
 ## Layout overview

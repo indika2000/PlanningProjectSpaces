@@ -97,6 +97,10 @@ Sections from doc 05: hero-split, category-tiles, product-carousel, publisher-lo
 4. "New This Week" automated email (Klaviyo/Shopify Email).
 5. A/B test: custom Buy-it-now vs. native accelerated checkout on the PDP.
 
+## Cards & topics addendum
+
+The comics + cards scope ([doc 10](10-cards-topics-and-showcases.md)) adds about **1.5–2 weeks**: the topic template, showcases and availability counts (≈1 week, Phases 3/5), and the card product pages and raw/graded intake (≈0.5–1 week, Phases 4/6). Revised estimate: **≈11 weeks to launch**.
+
 ## Timeline summary
 
 ```

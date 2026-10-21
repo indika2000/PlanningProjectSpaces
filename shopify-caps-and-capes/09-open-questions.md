@@ -13,6 +13,10 @@
 | 7 | Buy-it-now: custom styled (pixel-exact) vs. native accelerated wallets (conversion) | Custom (Option A, doc 06 §3) |
 | 8 | Raw comics: are variant covers separate products or variants of one product? | **Separate products per cover** (each has its own UPC, art and SEO value). Variants only for condition. |
 | 9 | What happens to sold slabs: archive, keep a "Sold" page for SEO, or redirect? | Keep as "Sold" for 90 days, then redirect to the series page |
+| 10 | Do we hold reseller rights to use game/league logos (Pokémon, One Piece, MLB/NFL/NBA), or do we stick to names in our own typeface? | Names only, generic icons |
+| 11 | Will cards also be sold on eBay or other marketplaces? If yes, inventory sync is a v1 requirement. | Shopify only at launch |
+| 12 | Which reference data source do we use for TCG sets and cards? | Decide per game in Phase 0 |
+| 13 | Is there a price floor below which raw singles aren't listed individually (bulk lots instead)? | List singles at $[X] and up, the rest as lots |
 
 ## B. Gaps in the mockups (need design)
 

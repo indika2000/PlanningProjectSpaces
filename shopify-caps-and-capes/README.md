@@ -1,6 +1,6 @@
 # Caps & Capes — Custom Shopify Storefront Plan
 
-Planning space for building **capsandcapes.com**, a dark, premium comic book & collectibles store on Shopify.
+Planning space for building **capsandcapes.com**, a dark, premium store for **comic books, trading cards (Pokémon, One Piece), sports cards (baseball, football, basketball) and collectibles**, graded and raw, on Shopify.
 The storefront must look exactly like the two approved mockups and carry their brand identity.
 
 | Mockup | File |
@@ -34,6 +34,7 @@ The docs follow a **domain-first** order: first what the brand and the business 
 | 07 | [Apps & integrations](07-apps-and-integrations.md) | Reviews, wishlist, preorders, pull list, search, newsletter, sell-to-us, and the build-or-buy call for each |
 | 08 | [Delivery roadmap](08-roadmap.md) | Phases, tasks, acceptance criteria, QA, launch checklist |
 | 09 | [Open questions & risks](09-open-questions.md) | Decisions the business needs to make, and gaps in the mockups |
+| 10 | [Cards, topics & showcases](10-cards-topics-and-showcases.md) | Trading and sports cards (graded/raw/sealed) next to comics; the Department → Topic → Format model; topic hub pages; availability counts; managed showcase banners; intake operations |
 
 ## Approach in one paragraph
 

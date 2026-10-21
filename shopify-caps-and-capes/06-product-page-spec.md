@@ -1,5 +1,7 @@
 # 06 — Product Page Spec
 
+> **Update — cards:** three more templates: `product.graded-card` (adds a subgrade grid, cert verification and population), `product.card` (raw singles with condition variants) and `product.sealed`. See [10-cards-topics-and-showcases.md](10-cards-topics-and-showcases.md).
+
 Reference: [`mockups/02-product-graded-comic.png`](mockups/02-product-graded-comic.png) (graded comic). One section system serves three templates. Blocks switch on and off by product type.
 
 | Template | Used for | Differences from mockup |

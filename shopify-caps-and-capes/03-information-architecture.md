@@ -1,5 +1,7 @@
 # 03 — Information Architecture
 
+> **Update — cards:** §1 navigation is replaced by the comics + cards nav (NEW ARRIVALS · COMICS · TRADING CARDS · SPORTS CARDS · GRADED · COLLECTIBLES · PREORDERS · SELL TO US). Topic pages are collections that use a shared `collection.topic` template. See [10-cards-topics-and-showcases.md](10-cards-topics-and-showcases.md).
+
 ## 1. Primary navigation (header)
 
 From the mockup, left → right:
