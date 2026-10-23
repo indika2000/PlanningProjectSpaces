@@ -84,8 +84,8 @@ Because both sides share **Format** and **Grading**, one grading model, one slab
 | Metaobject | Fields (key: type) | Web page? |
 |---|---|---|
 | **department** | `name`, `handle`, `nav_order: number_integer`, `topics: list.metaobject_reference<topic>` | No (it's the nav) |
-| **topic** | `name` ("Pokémon"), `short_name` ("Pokémon"), `department: metaobject_reference<department>`, `accent_color: color`, `icon: file_reference (svg)`, `tagline`, `intro: rich_text`, `hero_showcases: list.metaobject_reference<showcase>`, `inline_showcase: metaobject_reference<showcase>`, `featured_sets: list.metaobject_reference<card_set>` (or `featured_series` for comics), `formats_enabled: list.single_line_text (Graded, Raw, Sealed, Merch)`, `default_format`, `filter_profile: single_line_text (choices: tcg, sports, comics)`, `grails_collection: collection_reference`, `guide_articles: list.article_reference`¹ , `trust_points: list.metaobject_reference<trust_point>`, `seo_title`, `seo_description` | Linked from the topic collection (§3.5) |
-| **card_set** | `name`, `topic: metaobject_reference<topic>`, `manufacturer: metaobject_reference<manufacturer>`, `code` ("OP01"), `year: number_integer`, `release_date: date`, `era: single_line_text (Vintage, Modern, Ultra-modern)`, `language`, `logo: file_reference`, `hero_image: file_reference`, `card_count: number_integer` | Yes → `/pages/card_set/{handle}` (optional) |
+| **topic** | `name` ("Pokémon"), `short_name` ("Pokémon"), `department: metaobject_reference<department>`, `accent_color: color`, **brand-mark fields (§3.8)**, `tagline`, `intro: rich_text`, `hero_showcases: list.metaobject_reference<showcase>`, `inline_showcase: metaobject_reference<showcase>`, `featured_sets: list.metaobject_reference<card_set>` (or `featured_series` for comics), `featured_subjects: list.metaobject_reference<subject>` (sports "Rookies to watch"), `formats_enabled: list.single_line_text (Graded, Raw, Sealed, Merch)`, `default_format`, `filter_profile: single_line_text (choices: tcg, sports, comics)`, `grails_collection: collection_reference`, `guide_articles: list.article_reference`¹ , `trust_points: list.metaobject_reference<trust_point>`, `seo_title`, `seo_description` | Linked from the topic collection (§3.5) |
+| **card_set** | `name`, `topic: metaobject_reference<topic>`, `manufacturer: metaobject_reference<manufacturer>`, `code` ("OP01"), `year: number_integer`, `release_date: date`, `era: single_line_text (Vintage, Modern, Ultra-modern)`, `language`, **brand-mark fields (§3.8)**, `hero_image: file_reference`, `card_count: number_integer` | Yes → `/pages/card_set/{handle}` (optional) |
 | **card** | `set: metaobject_reference<card_set>`, `number` ("4/102", "OP01-120", "150"), `subject: metaobject_reference<subject>`, `subject_name` (denormalised for search), `variant` ("Holo", "Alt Art", "Refractor"), `rarity`, `is_rookie: boolean`, `is_auto: boolean`, `is_relic: boolean`, `serial_run: number_integer` (99 for /99), `first_edition: boolean`, `image: file_reference` | No |
 | **subject** | `name`, `kind: single_line_text (Character, Player)`, `topic: metaobject_reference<topic>`, `team` (players), `position` (players), `portrait: file_reference` | Optional (player pages later) |
 | **showcase** | see §5 | No |
@@ -189,6 +189,68 @@ The homepage availability matrix and topic format tabs show **live in-stock coun
 3. `Raw Card`: the variant option "Condition" uses only the NM/LP/MP/HP/DMG values. Each variant has its own SKU and price.
 4. If `grading.company.has_subgrades` and subgrades are present, all four keys exist.
 5. The cert number is unique across **all** graded products (comics and cards).
+
+### 3.8 Brand marks (logos): drop-in by design
+
+**Short answer: yes.** Any logo you have the rights to use can be added in the Shopify admin and appears everywhere that entity is shown. The theme never hard-codes a logo; every place a topic, set, publisher, maker or grader appears goes through one snippet (`brand-mark.liquid`) that chooses between the official mark and the text fallback.
+
+**Fields.** The same field group is added to every metaobject that can carry a logo: `department`, `topic`, `card_set`, `publisher`, `manufacturer`, `grading_company`, `franchise`.
+
+| Field | Type | Purpose |
+|---|---|---|
+| `mark_mono` | `file_reference` (SVG preferred) | Single-colour version. The theme tints it off-white on dark UI and amber on hover. Used in tiles, menus, the publisher/maker strip and filters. |
+| `mark_full` | `file_reference` (SVG or transparent PNG ≥ 600 px wide) | Full-colour version for hero banners, topic page headers and product pages, where the licensor requires the official colours. |
+| `mark_icon` | `file_reference` (square SVG) | Compact symbol for small slots: menu dots, filter chips, mobile tiles. Optional. |
+| `mark_approved` | `boolean` | **Kill switch.** The logo only renders when this is ticked. Lets you upload a mark while rights are being confirmed, and pull it instantly if a licence lapses. |
+| `mark_min_height` | `number_integer` (px) | Smallest height the licensor allows. The snippet won't render the mark below it and uses the text fallback instead. |
+| `mark_clearspace` | `number_integer` (% of height) | Licensor clear-space rule; becomes padding. |
+| `mark_background` | choices: `any`, `dark_only`, `light_only` | Some marks may only appear on certain backgrounds. If the slot doesn't match, use the fallback. |
+| `mark_usage_note` | `multi_line_text` | Internal: licence reference, expiry date, contact. Not shown on the storefront. |
+| `mark_expires` | `date` | Licence end. Flow switches `mark_approved` off on this date and alerts the owner 30 days before. |
+
+**Fallback chain (per slot):**
+
+```liquid
+{%- # snippets/brand-mark.liquid  (props: entity, slot, height) -%}
+{%- liquid
+  assign mark = nil
+  if entity.mark_approved.value and height >= entity.mark_min_height.value
+    case slot
+      when 'hero', 'header', 'pdp' then assign mark = entity.mark_full.value | default: entity.mark_mono.value
+      when 'chip', 'dot'           then assign mark = entity.mark_icon.value | default: entity.mark_mono.value
+      else                              assign mark = entity.mark_mono.value
+    endcase
+  endif
+-%}
+{%- if mark -%}
+  {{ mark | image_url: height: height | image_tag: alt: entity.name.value, class: 'brand-mark brand-mark--' | append: slot }}
+{%- else -%}
+  <span class="brand-mark-fallback brand-mark-fallback--{{ slot }}">{{ entity.name.value }}</span>
+{%- endif -%}
+```
+
+(SVG files are rendered with `image_url`, or inlined for `mark_mono` so CSS can recolour them. The developer decides per slot during the build.)
+
+**Where marks appear and their size limits:**
+
+| Slot | Where on the canvas | Variant | Height | Fallback |
+|---|---|---|---|---|
+| `topic-tile` | Home "Shop by topic" tiles | mono | 28 px | Name + accent dot |
+| `topic-hero` | Topic page eyebrow / hero | full | 40–56 px | Eyebrow text |
+| `menu` | Mega menu topic switcher, mobile menu | icon or mono | 18 px | Accent dot + name |
+| `matrix-row` | "Shop the inventory" row label | icon | 20 px | Accent dot + name |
+| `set-tile` | "Shop by set" tiles | full | 36 px | Set name in condensed type |
+| `maker-strip` | Publisher & maker strip | mono | 32 px | Name in condensed type |
+| `filter-chip` | Facet values (publisher, grader, maker) | icon | 16 px | Text only |
+| `pdp` | Grade panel (grader), spec table (maker/set) | full | 24 px | Text |
+| `showcase` | Banners can use the topic's mark via `glow`/eyebrow | full | 32–48 px | Eyebrow text |
+
+**Rules that keep it safe:**
+1. The text fallback is the **designed** state, not an error state. Every layout works with no logos at all, so you can launch without any licences.
+2. Logos never replace the accessible name: `alt` = entity name, and the visible name stays in screen-reader text.
+3. Licensor colours stay in `mark_full`. The brand accent (`accent_color`) is separate, so a topic's glow can stay subtle even when its full-colour logo is bright.
+4. Product photos of real cards, slabs and boxes are not "logos" and don't need these fields. That's normal resale imagery.
+5. Shopify staff permissions are per area (e.g. metaobjects), not per field. Approving a mark is therefore a **process rule**: only the owner ticks `mark_approved`. A nightly script lists every approved mark with its expiry date so changes are visible (see doc 11 §2 and §6).
 
 ## 4. Navigation & IA (replaces doc 03 §1)
 
@@ -299,7 +361,7 @@ One template renders all six topics. The accent colour is applied as `--topic-ac
 | Football | `#3FB27F` | glow + eyebrow |
 | Basketball | `#F0743E` | glow + eyebrow |
 
-Use official game/league marks only where the business holds rights or a reseller permission. Default to topic **names in the brand typeface** with a generic icon (the designs do this).
+Official game/league marks plug into the brand-mark slots in §3.8. Until a mark is uploaded **and** approved, the theme falls back to the topic name in the brand typeface with a generic icon. That fallback is what the canvas designs show.
 
 ## 8. Card product page (`product.graded-card` / `product.card`)
 

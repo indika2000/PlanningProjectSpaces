@@ -37,6 +37,7 @@ The docs follow a **domain-first** order: first what the brand and the business 
 | 08 | [Delivery roadmap](08-roadmap.md) | Phases, tasks, acceptance criteria, QA, launch checklist |
 | 09 | [Open questions & risks](09-open-questions.md) | Decisions the business needs to make, and gaps in the mockups |
 | 10 | [Cards, topics & showcases](10-cards-topics-and-showcases.md) | Trading and sports cards (graded/raw/sealed) next to comics; the Department → Topic → Format model; topic hub pages; availability counts; managed showcase banners; intake operations |
+| 11 | [Shopify setup & operations](11-shopify-setup-and-operations.md) | Store setup checklist, staff roles, inventory routines and intake playbooks, Flow automations, and the CMS component catalogue (what's editable where, including Featured and banners, logos, new topics) |
 
 ## Approach in one paragraph
 

@@ -67,7 +67,8 @@ Scripts in `scripts/` (Python 3.12, `httpx` + Admin GraphQL, `pydantic` models m
 
 1. `setup_definitions.py`: idempotently creates all metafield definitions (with validations, storefront access = public read, filter-enabled where needed) and metaobject definitions (with web-page capability for publisher/series).
 2. `import_catalog.py`: CSV/Google Sheet → validate → upsert metaobjects (publisher → series → issue → creator) → upsert products, attach media, set template suffix by product type.
-3. `validate_catalog.py`: enforces the invariants in doc 02 §3.8 and reports violations as CSV.
+3. `create_topic.py {handle}`: creates a new topic's hub collection and per-format collections with the in-stock rule (doc 11 §7.5).
+4. `validate_catalog.py`: enforces the invariants in doc 02 §3.8 and reports violations as CSV.
 
 Staff-friendly alternative for day-to-day listing: Shopify admin with metafield pinning. Each product type has its pinned metafields shown on the product form, so staff can list a slab in about 2 minutes.
 
