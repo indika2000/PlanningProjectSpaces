@@ -17,7 +17,7 @@ Built from the brand tokens in [01-brand-identity.md](01-brand-identity.md) to f
 |---|---|---|
 | Home · Menu drawer · Predictive search · Collection (Graded) · Filter sheet · Product (graded) with sticky buy bar · Cart drawer | Comics mega menu · Collection with sidebar filters · Cart drawer · Product (collectible, with edition picker) · Sell To Us · Series page + Pull List | Buttons (all states) · Product card states (in stock, low stock, sale, preorder, 1 of 1, sold out) · Toasts · Empty states · Form fields · Tags |
 
-**Comics + Cards (v2) page** on the same canvas (opens by default): desktop home with comics and cards together, Pokémon topic page, graded sports-card product page, Trading Cards mega menu, the showcase banner-slot system, mobile home v2, mobile Baseball topic page and the updated menu drawer. The model behind them is in [doc 10](10-cards-topics-and-showcases.md). The v1 boards now use the new navigation.
+**Comics + Cards (v2) page** on the same canvas (opens by default): desktop home with comics and cards together, Pokémon topic page, graded sports-card product page, Trading Cards mega menu, the showcase banner-slot system, the brand-mark (logo) slots with fallback vs licensed-logo states, mobile home v2, mobile Baseball topic page and the updated menu drawer. The model behind them is in [doc 10](10-cards-topics-and-showcases.md). The v1 boards now use the new navigation.
 
 All counts and prices on the canvas are illustrative. Sports player names are fictional. Copy shown as `[PLACEHOLDER]` (free-shipping threshold, store-credit bonus %, offer turnaround, release dates, unknown prices) is waiting on a business decision.
 
